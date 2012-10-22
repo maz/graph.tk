@@ -1,3 +1,5 @@
+The below is a copy of the original README. This fork merely hacks together the drawing of tangent lines, in the most inelegant way conceivable.
+=========
 Graph.tk is being rewritten from scratch (again), and that new version hasn't been released publicly yet. The code is not available either. So, development on *this git repository* has ended, because the new version will be much, much better.
 
 The math CAS code for the new version is available under [javascript-cas](https://github.com/aantthony/javascript-cas), which is currently being worked on so isn't really suitable as a library for other things yet.
