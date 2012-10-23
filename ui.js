@@ -170,12 +170,14 @@ app.ui = (function () {
 	}
 	
 	function draw_tangent(ctx,graph){
+		if(graph.tangentDisabled){return;}
 		if(!graph.math[0].hacked_tangent){
 			graph.math[0].hacked_tangent=compile(graph.math[0].differentiate()).f;
 		}
-		if(!window.magical_hacked_point){return;}
+		if(!window.magical_hacked_point || !graph.math[0].hacked_tangent){return;}
 		var p=window.magical_hacked_point;
-		point_slope(ctx,graph.math[0].hacked_tangent(p[0]),p[0],graph.f(p[0]));
+		var y=graph.f(p[0]);
+		point_slope(ctx,graph.math[0].hacked_tangent(p[0]),p[0],y);
 	}
 
 	function actual_draw() {
@@ -803,6 +805,23 @@ app.ui = (function () {
 			var check_ = li.firstChild.firstChild;
 			var delete_ = li.getElementsByClassName("delete")[0];
 			inputbox.appendChild(document.createTextNode(n.equation || ""));
+			li.firstChild.addEventListener('dblclick',function(evt){
+				for (var i = 0; i < graphs.length; i++) {
+					if (graphs[i].gid == n.gid) {
+						var graph=graphs[i];
+						if(graph.oldBackground==null){
+							graph.oldBackground=evt.target.style.backgroundImage;
+						}
+						evt.target.style.backgroundSize="contain";
+						evt.target.style.backgroundPosition="center center";
+						evt.target.style.backgroundRepeat="no-repeat";
+						evt.target.style.backgroundImage=graph.tangentDisabled?graph.oldBackground:"url('prof-toothy.png')";
+						graph.tangentDisabled=!graph.tangentDisabled;
+						draw();
+						return;
+					}
+				}
+			});
 			check_.addEventListener("change", function (e) {
 				for (var i = 0; i < graphs.length; i++) {
 					if (graphs[i].gid == n.gid) {
